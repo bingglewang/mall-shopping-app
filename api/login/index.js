@@ -1,13 +1,16 @@
-import urlRequest from "@/util/request/index.js"
+import urlRequest from '@/util/request'
 
 /**
  * 登录
  * @param {data}  
  */
+console.log(urlRequest)
 const login = data => {
-	return  urlRequest('/api/admin/login',data,POST,function() {})
+	  urlRequest.urlRequest('/api/admin/login',data,"POST",function(res) {
+		return res
+	})
 }
 
-module.exports = {
+export default{
   login
 }

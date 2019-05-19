@@ -34,7 +34,7 @@
 
 <script>
 	import md5 from "@/common/SDK/md5.min.js";
-	import {login} from "@/api/login/index.js"
+	import login from "@/api/login/index.js";
 	export default {
 		data() {
 			return {
@@ -53,6 +53,7 @@
 			
 		},
 		onLoad() {
+			
 			//APP显示第三方登录
 			// #ifdef APP-PLUS
 				this.isShowOauth=true;
@@ -131,7 +132,7 @@
 				uni.showLoading({
 					title: '提交中...'
 				})
-				let res = login({username:this.phoneNumber,password:this.passwd});
+				let res = login.login({username:this.phoneNumber,password:this.passwd});
 				uni.hideLoading()
 				//模板示例比对本地储存的用户信息，实际使用中请替换为上传服务器比对。
 				/* setTimeout(()=>{

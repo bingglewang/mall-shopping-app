@@ -1,9 +1,9 @@
-import {baseUrl} from '../env/index'
+import {BaseUrl} from '../env/index'
 // 参数： url:请求地址  param：请求参数  way：请求方式 callBack：回调函数
 function urlRequest(url, param, way, callBack) {
 
 	let baseParam = {
-		deviceId: "",
+		/* deviceId: "",
 		os: "ios",
 		ip: '192.168.1.35',
 		versionName: "1.1.0",
@@ -11,7 +11,7 @@ function urlRequest(url, param, way, callBack) {
 		pageNum: "",
 		pageSize: "",
 		appName: "hfp",
-		userId: "123"
+		userId: "123" */
 	}
 
 	let token = "";
@@ -24,7 +24,7 @@ function urlRequest(url, param, way, callBack) {
 	});
 
 	uni.request({
-		url: baseUrl+url, //仅为示例，并非真实接口地址。
+		url: BaseUrl+url, //仅为示例，并非真实接口地址。
 		data: JSON.stringify(Object.assign(param, baseParam)),
 		header: {
 			'Token': token,
