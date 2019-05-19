@@ -22,7 +22,7 @@ function urlRequest(url, param, way, callBack) {
 			token = res.data
 		}
 	});
-
+	
 	uni.request({
 		url: BaseUrl+url, //仅为示例，并非真实接口地址。
 		data: JSON.stringify(Object.assign(param, baseParam)),

@@ -6,7 +6,7 @@ import urlRequest from '@/util/request'
  */
 console.log(urlRequest)
 const login = data => {
-	  urlRequest.urlRequest('/api/admin/login',data,"POST",function(res) {
+	  urlRequest.urlRequest('admin/login',data,"POST",function(res) {
 		return res
 	})
 }

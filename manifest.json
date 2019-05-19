@@ -1,5 +1,5 @@
 {
-    "name" : "aaaaaaaaaaa",
+    "name" : "商城",
     "appid" : "",
     "description" : "",
     "versionName" : "1.0.0",
@@ -7,7 +7,7 @@
     "transformPx" : false,
     "app-plus" : {
         /* 5+App特有相关 */
-		"usingComponents":true,
+        "usingComponents" : true,
         "splashscreen" : {
             "alwaysShowBeforeRender" : true,
             "waiting" : true,
@@ -55,23 +55,24 @@
     /* 快应用特有相关 */
     "mp-weixin" : {
         /* 小程序特有相关 */
-		"usingComponents":true,
+        "usingComponents" : true,
         "appid" : "",
         "setting" : {
             "urlCheck" : true
         }
     },
-	
-    "h5": {
-        "devServer": {
-            "disableHostCheck": true,
-            "proxy": {
-                "/api": {
-                    "target": "http://localhost:8088",
-                    "changeOrigin": true,
-                    "secure": false
+    "h5" : {
+        "devServer" : {
+            "port" : 8000,
+            "disableHostCheck" : true,
+            "proxy" : {
+                "/api" : {
+                    "target" : "http://192.168.0.102:8088",
+                    "changeOrigin" : true,
+                    "secure" : false
                 }
-            }
+            },
+            "https" : false
         }
     }
 }
