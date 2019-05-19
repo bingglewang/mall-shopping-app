@@ -1,0 +1,4 @@
+const BaseUrl = '';
+export{
+  BaseUrl
+}
