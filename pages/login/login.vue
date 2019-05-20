@@ -35,6 +35,9 @@
 <script>
 	import md5 from "@/common/SDK/md5.min.js";
 	import login from "@/api/login/index.js";
+	import {  
+        mapMutations  
+    } from 'vuex';
 	export default {
 		data() {
 			return {
@@ -62,6 +65,7 @@
 			
 		}, 
 		methods: {
+			//...MapMutations(['login']),
 			oauthLogin(provider){
 				uni.showLoading();
 				//第三方登录
@@ -123,42 +127,36 @@
 				});
 			},
 			doLogin(){
+				let _this = this;
 				uni.hideKeyboard();
 				//验证手机号码
-				/* if(!(/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.phoneNumber))){ 
+				if(!(/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.phoneNumber))){ 
 					uni.showToast({title: '请填写正确手机号码',icon:"none"});
 					return false; 
-				} */
+				}
 				uni.showLoading({
 					title: '提交中...'
 				})
-				let res = login.login({username:this.phoneNumber,password:this.passwd});
-				uni.hideLoading()
-				//模板示例比对本地储存的用户信息，实际使用中请替换为上传服务器比对。
-				/* setTimeout(()=>{
-					let md5PW = md5(this.passwd)
-					uni.getStorage({
-						key: 'UserList',
-						success: (res)=>{
-							for(let i in res.data){
-								let row = res.data[i];
-								if(row.username==this.phoneNumber){
-									uni.hideLoading()
-									//比对密码
-									if(md5PW == res.data[i].passwd){
-										uni.showToast({title: '登录成功',icon:"success"});
-									}else{
-										uni.showToast({title: '账号或密码不正确',icon:"none"});
-									}
-								}
-							}
-						},
-						fail:function(e){
-							uni.hideLoading()
-							uni.showToast({title: '手机号码未注册',icon:"none"});
-						}
-					});
-				},1000) */
+				let loginParam = {
+					username:this.phoneNumber,
+					password:this.passwd
+				}
+				login.login(loginParam, function(resp){
+					uni.hideLoading()
+					console.log(666,resp);
+					if(resp.data.code - 200 == 0){
+						uni.showToast({title: '登录成功',icon:"success"});
+						//将获取的token信息存储到缓存
+						uni.setStorage({
+						    key: 'token',  
+						    data: resp.data.data.tokenHead+ " "+resp.data.data.token
+						}) 
+						//_this.login(resp.data.data);
+                        uni.navigateBack();  
+					}else{
+						uni.showToast({title: resp.data.message,icon:"none"});
+					}
+				});
 			}
 		}
 	}
