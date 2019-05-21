@@ -8,6 +8,36 @@ const login = (data,callback) => {
 	urlRequest.urlRequest('admin/login',data,"POST",callback);
 }
 
+/**
+ * 注册验证码
+ */
+const register = (data,callback) => {
+	urlRequest.urlRequest('admin/sendCode?phone='+data.phone,{},"POST",callback);
+}
+
+/**
+ * 用户注册
+ * @param {dataPath} 
+ * @param {data}  
+ */
+const registerUser = (dataPath,data,callback) => {
+	urlRequest.urlRequest('admin/register?code='+dataPath,data,"POST",callback);
+}
+
+resetPwd
+/**
+ * 重置密码
+ * @param {dataPath} 
+ * @param {data}  
+ */
+const resetPwd = (dataPath,data,callback) => {
+	urlRequest.urlRequest('admin/resetPwd?code='+dataPath,data,"POST",callback);
+}
+
+
 export default{
-  login
+  login,
+	register,
+	registerUser,
+	resetPwd
 }

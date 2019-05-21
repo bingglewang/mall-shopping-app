@@ -27,6 +27,10 @@
 
 <script>
 	import md5 from "@/common/SDK/md5.min.js";
+	import register from "@/api/login/index.js";
+	import registerUser from "@/api/login/index.js";
+	import resetPwd from "@/api/login/index.js";
+	
 	export default {
 		data() {
 			return {
@@ -44,6 +48,7 @@
 		methods: {
 			Timer(){},
 			getCode(){
+				let _this = this;
 				uni.hideKeyboard()
 				if(this.getCodeisWaiting){
 					return ;
@@ -59,7 +64,13 @@
 				setTimeout(()=>{
 					uni.showToast({title: '验证码已发送',icon:"none"});
 					//示例默认1234，生产中请删除这一句。
-					this.code=1234;
+					//this.code=1234;
+					let registerData = {
+						phone : _this.phoneNumber
+					}
+					register.register(registerData,function(resp){
+						console.log(666,resp)
+					})
 					this.setTimer();
 				},1000)
 			},
@@ -87,15 +98,23 @@
 					return false; 
 				} 
 				//示例验证码，实际使用中应为请求服务器比对验证码是否正确。
-				if(this.code!=1234){ 
+				/* if(this.code!=1234){ 
 					uni.showToast({title: '验证码不正确',icon:"none"});
 					return false; 
-				}
+				} */
 				uni.showLoading({
 					title: '提交中...'
 				})
+				let registerUserData = {
+					username: this.phoneNumber,
+					password: this.passwd
+				}
+				registerUser.registerUser(this.code, registerUserData, function(resp){
+					uni.hideLoading()
+					console.log(777, resp)
+				})
 				//模板示例把用户注册信息储存在本地，实际使用中请替换为上传服务器。
-				setTimeout(()=>{
+				/* setTimeout(()=>{
 					uni.getStorage({
 						key: 'UserList', 
 						success:(res)=>{
@@ -133,7 +152,7 @@
 							});
 						}
 					});
-				},1000)
+				},1000) */
 			},
 			toLogin(){ 
 				uni.hideKeyboard()

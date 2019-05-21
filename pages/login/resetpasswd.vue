@@ -25,6 +25,9 @@
 
 <script>
 	import md5 from "@/common/SDK/md5.min.js";
+	import register from "@/api/login/index.js";
+	import resetPwd from "@/api/login/index.js";
+	
 	export default {
 		data() {
 			return {
@@ -42,6 +45,7 @@
 		methods: {
 			Timer(){},
 			getCode(){
+				let _this = this;
 				if(this.getCodeisWaiting){
 					return ;
 				}
@@ -56,7 +60,13 @@
 				setTimeout(()=>{
 					uni.showToast({title: '验证码已发送',icon:"none"});
 					//示例默认1234，生产中请删除这一句。
-					this.code=1234;
+					//this.code=1234;
+					let resetPwdData = {
+						phone : _this.phoneNumber
+					}
+					register.register(resetPwdData,function(resp){
+						console.log(666,resp)
+					})
 					this.setTimer();
 				},1000)
 				
@@ -87,15 +97,25 @@
 				} 
 
 				//示例验证码，实际使用中应为请求服务器比对验证码是否正确。
-				if(this.code!=1234){ 
+				/* if(this.code!=1234){ 
 					uni.showToast({title: '验证码不正确',icon:"none"});
 					return false; 
-				}
+				} */
 				uni.showLoading({
 					title: '提交中...'
 				})
+				
+				let resetPwdData = {
+					username: this.phoneNumber,
+					password: this.passwd
+				}
+				resetPwd.resetPwd(this.code, resetPwdData, function(resp){
+					uni.hideLoading()
+					console.log(777, resp)
+				})
+				
 				//模板示例修改本地储存的用户信息，实际使用中请替换为上传服务器修改。
-				setTimeout(()=>{
+				/* setTimeout(()=>{
 					uni.getStorage({
 						key: 'UserList',
 						success: (res)=>{
@@ -126,7 +146,7 @@
 							uni.showToast({title: '手机号码未注册',icon:"none"});
 						}
 					});
-				},1000)
+				},1000) */
 				
 				
 			}
