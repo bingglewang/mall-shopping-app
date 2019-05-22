@@ -1,10 +1,10 @@
 <template>
 	<view class="container">
-		<view class="list-cell b-b m-t" @click="navTo('个人资料')" hover-class="cell-hover" :hover-stay-time="50">
+		<view class="list-cell b-b m-t" @click="navTo('/pages/userinfo/userinfo')" hover-class="cell-hover" :hover-stay-time="50">
 			<text class="cell-tit">个人资料</text>
 			<text class="cell-more yticon icon-you"></text>
 		</view>
-		<view class="list-cell b-b" @click="navTo('收货地址')" hover-class="cell-hover" :hover-stay-time="50">
+		<view class="list-cell b-b" @click="navTo('/pages/address/address')" hover-class="cell-hover" :hover-stay-time="50">
 			<text class="cell-tit">收货地址</text>
 			<text class="cell-more yticon icon-you"></text>
 		</view>
@@ -38,7 +38,8 @@
 
 <script>
 	import {  
-	    mapMutations  
+	    mapMutations,
+		mapState
 	} from 'vuex';
 	export default {
 		data() {
@@ -46,11 +47,20 @@
 				
 			};
 		},
+		 computed: {
+			...mapState(['hasLogin','userInfo'])
+		},
 		methods:{
 			...mapMutations(['logout']),
 
 			navTo(url){
-				this.$api.msg(`跳转到${url}`);
+				/* this.$api.msg(`跳转到${url}`); */
+				if(!this.hasLogin){
+					url = '/pages/login/login';
+				}
+				uni.navigateTo({  
+					url
+				})  
 			},
 			//退出登录
 			toLogout(){

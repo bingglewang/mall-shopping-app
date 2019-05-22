@@ -65,6 +65,7 @@
 						phone : _this.phoneNumber
 					}
 					register.register(resetPwdData,function(resp){
+						
 						console.log(666,resp)
 					})
 					this.setTimer();
@@ -111,44 +112,17 @@
 				}
 				resetPwd.resetPwd(this.code, resetPwdData, function(resp){
 					uni.hideLoading()
-					console.log(777, resp)
+					if(resp.data.code - 200 == 0){
+						uni.showToast({title: '密码重置成功',icon:"success"});
+						setTimeout(function () {
+							uni.navigateTo({
+								url: '/pages/login/login'
+							})
+						}, 2000);
+					}else{
+						uni.showToast({title: resp.data.message,icon:"none"});
+					}
 				})
-				
-				//模板示例修改本地储存的用户信息，实际使用中请替换为上传服务器修改。
-				/* setTimeout(()=>{
-					uni.getStorage({
-						key: 'UserList',
-						success: (res)=>{
-							uni.hideLoading()
-							for(let i in res.data){
-								let row = res.data[i];
-								if(row.username==this.phoneNumber){
-									//修改记录，密码md5
-									res.data[i].passwd = md5(this.passwd);
-									uni.setStorage({
-										key: 'UserList',
-										data: res.data,
-										success: function () {
-											uni.showToast({title: '密码已重置',icon:"success"});
-											setTimeout(()=>{
-												uni.navigateBack();
-											},1000)
-										}
-									});
-									return ;
-								}
-							}
-							uni.showToast({title: '手机号码未注册',icon:"none"});
-							
-						},
-						fail:function(e){
-							uni.hideLoading()
-							uni.showToast({title: '手机号码未注册',icon:"none"});
-						}
-					});
-				},1000) */
-				
-				
 			}
 		}
 	}

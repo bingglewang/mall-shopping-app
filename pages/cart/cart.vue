@@ -132,7 +132,7 @@
 			},
 			navToLogin(){
 				uni.navigateTo({
-					url: '/pages/public/login'
+					url: '/pages/login/login'
 				})
 			},
 			 //选中状态处理

@@ -65,7 +65,7 @@
 			
 		}, 
 		methods: {
-			//...MapMutations(['login']),
+			...mapMutations(['login']),
 			oauthLogin(provider){
 				uni.showLoading();
 				//第三方登录
@@ -150,8 +150,15 @@
 						uni.setStorage({
 						    key: 'token',  
 						    data: resp.data.data.tokenHead+ " "+resp.data.data.token
-						}) 
-						//_this.login(resp.data.data);
+						})
+						let defaultUserInfo = {
+							id: resp.data.data.id,
+							mobile: resp.data.data.mobile,
+							username: _this.phoneNumber,
+							nickname: resp.data.data.nickname,
+							portrait: resp.data.data.portrait
+						}
+						_this.login(defaultUserInfo);
                         uni.navigateBack();  
 					}else{
 						uni.showToast({title: resp.data.message,icon:"none"});

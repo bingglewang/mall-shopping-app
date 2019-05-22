@@ -7,13 +7,20 @@
 				<!-- 用户信息 -->
 				<view class="user">
 					<!-- 头像 -->
-					<view class="left">
+					<view class="left" v-if="!hasLogin">
 						<image :src="user.face" @tap="toSetting"></image>
 					</view>
+					<view class="left" v-if="hasLogin">
+						<image :src="userInfo.portrait" @tap="toSetting"></image>
+					</view>
 					<!-- 昵称,个性签名 -->
-					<view class="right">
+					<view class="right" v-if="!hasLogin">
 						<view class="username" @tap="toLogin">{{user.username}}</view>
 						<view class="signature" @tap="toSetting">{{user.signature}}</view>
+					</view>
+					<view class="right" v-if="hasLogin">	
+						<view class="username" @tap="toSetting">{{userInfo.username}}</view>
+						<view class="signature" @tap="toSetting">{{userInfo.mobile}}</view>
 					</view>
 				</view>
 			</view>
@@ -116,7 +123,7 @@
 			return {
 				//个人信息,
 				user:{
-					username:'游客1002',
+					username: "游客001",
 					face:'../../static/img/face.jpg',
 					signature:'点击昵称跳转登录/注册页',
 					integral:0,

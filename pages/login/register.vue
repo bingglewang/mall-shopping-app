@@ -29,7 +29,7 @@
 	import md5 from "@/common/SDK/md5.min.js";
 	import register from "@/api/login/index.js";
 	import registerUser from "@/api/login/index.js";
-	import resetPwd from "@/api/login/index.js";
+	
 	
 	export default {
 		data() {
@@ -98,10 +98,6 @@
 					return false; 
 				} 
 				//示例验证码，实际使用中应为请求服务器比对验证码是否正确。
-				/* if(this.code!=1234){ 
-					uni.showToast({title: '验证码不正确',icon:"none"});
-					return false; 
-				} */
 				uni.showLoading({
 					title: '提交中...'
 				})
@@ -111,48 +107,15 @@
 				}
 				registerUser.registerUser(this.code, registerUserData, function(resp){
 					uni.hideLoading()
-					console.log(777, resp)
+					if(resp.data.code - 200 == 0){
+						uni.showToast({title: '注册成功',icon:"success"});
+						uni.navigateTo({
+							url: '/pages/login/login'
+						})
+					}else{
+						uni.showToast({title: resp.data.message,icon:"none"});
+					}
 				})
-				//模板示例把用户注册信息储存在本地，实际使用中请替换为上传服务器。
-				/* setTimeout(()=>{
-					uni.getStorage({
-						key: 'UserList', 
-						success:(res)=>{
-							//增加记录，密码md5
-							res.data.push({username:this.phoneNumber,passwd:md5(this.passwd)})
-							uni.setStorage({
-								key: 'UserList',
-								data: res.data,
-								success: function () {
-									uni.hideLoading()
-									uni.showToast({title: '注册成功',icon:"success"});
-									setTimeout(function(){
-										uni.navigateBack();
-									},1000)
-								}
-							});
-						},
-						fail:(e)=>{
-							uni.hideLoading()
-							console.log('error');
-							//新建UserList
-							uni.setStorage({
-								key: 'UserList',
-								data: [{username:this.phoneNumber,passwd:md5(this.passwd)}],
-								success: function () {
-									uni.hideLoading()
-									uni.showToast({title: '注册成功',icon:"success"});
-									setTimeout(function(){
-										uni.navigateBack();
-									},1000)
-								},
-								fail:function(e){
-									console.log('set error:'+JSON.stringify(e));
-								}
-							});
-						}
-					});
-				},1000) */
 			},
 			toLogin(){ 
 				uni.hideKeyboard()

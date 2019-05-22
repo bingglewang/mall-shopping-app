@@ -1,86 +1,149 @@
 <template>
 	<view>
-		<view class="user-section">
-			<image class="bg" src="/static/user-bg.jpg"></image>
-			<text class="bg-upload-btn yticon icon-paizhao"></text>
-			<view class="portrait-box">
-				<image class="portrait" :src="userInfo.portrait || '/static/missing-face.png'"></image>
-				<text class="pt-upload-btn yticon icon-paizhao"></text>
+		<view class="content">
+			<view class="list">
+				<view class="row">
+					<view class="title">头像</view>
+					<view class="right"><view class="tis">
+					<avatar
+						selWidth="200px" selHeight="400upx"
+						:avatarSrc="url" @upload="myUpload" quality="0.9"
+						avatarStyle="" >
+					</avatar>
+					<!-- <image src="/static/img/face.jpg" mode="widthFix"></image> -->
+					</view><view class="icon jiantou"></view></view>
+				</view>
+				<view class="row">
+					<view class="title">昵称</view>
+					<view class="right"><view class="tis">大黑哥</view><view class="icon jiantou"></view></view>
+				</view>
+				<view class="row">
+					<view class="title">个性签名</view>
+					<view class="right"><view class="tis">这人太懒了，什么都不写</view><view class="icon jiantou"></view></view>
+				</view>
+				<view class="row">
+					<view class="title">收货地址</view>
+					<view class="right"><view class="tis"></view><view class="icon jiantou"></view></view>
+				</view>
+				<view class="row">
+					<view class="title">账户安全</view>
+					<view class="right"><view class="tis"></view><view class="icon jiantou"></view></view>
+				</view>
+			</view>
+			<view class="list">
+				<view class="row">
+					<view class="title">通知提醒</view>
+					<view class="right"><view class="tis"></view><view class="icon jiantou"></view></view>
+				</view>
+				<view class="row">
+					<view class="title">支付设置</view>
+					<view class="right"><view class="tis"></view><view class="icon jiantou"></view></view>
+				</view>
+				<view class="row">
+					<view class="title">通用</view>
+					<view class="right"><view class="tis"></view><view class="icon jiantou"></view></view>
+				</view>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script>
-	import {  
-	    mapState,  
-	    mapMutations  
-	} from 'vuex';  
+	import avatar from "../../components/yq-avatar/yq-avatar.vue";
+	import uploadFile from "@/api/fileupload/index.js";
+	
 	export default {
+		components: {
+            avatar
+        },
 		data() {
 			return {
-				
+				url: "/static/img/face.jpg"
 			};
 		},
-		computed:{
-			...mapState(['userInfo']),
+		methods: {
+			myUpload(path) {
+                this.url = path;
+				let opt = {
+					"filePath": this.url,
+					"name": 'file'
+				}
+				let formData = {
+					"imgSystemId": 'yojo网',
+					"imgSpecificUniqueValue": 'bingglewang'
+				}
+				uploadFile.uploadFile(opt,formData,function(resp){
+					console.log(666,resp)
+				})
+            }
 		}
 	}
 </script>
 
 <style lang="scss">
-	page{
-		background: $page-color-base;
-	}
-	.user-section{
-		display:flex;
-		align-items:center;
-		justify-content: center;
-		height: 460upx;
-		padding: 40upx 30upx 0;
-		position:relative;
-		.bg{
-			position:absolute;
-			left: 0;
-			top: 0;
-			width: 100%;
-			height: 100%;
-			filter: blur(1px);
-			opacity: .7;
-		}
-		.portrait-box{
-			width: 200upx;
-			height: 200upx;
-			border:6upx solid #fff;
-			border-radius: 50%;
-			position:relative;
-			z-index: 2;
-		}
-		.portrait{
-			position: relative;
-			width: 100%;
-			height: 100%;
-			border-radius: 50%;
-		}
-		.yticon{
-			position:absolute;
-			line-height: 1;
-			z-index: 5;
-			font-size: 48upx;
-			color: #fff;
-			padding: 4upx 6upx;
-			border-radius: 6upx;
-			background: rgba(0,0,0,.4);
-		}
-		.pt-upload-btn{
-			right: 0;
-			bottom: 10upx;
-		}
-		.bg-upload-btn{
-			right: 20upx;
-			bottom: 16upx;
+page{
+	background-color: #f3f3f3;	
+}
+@font-face {
+	font-family: 'HMfont-home';
+	src: url('data:application/x-font-woff2;charset=utf-8;base64,d09GMgABAAAAAAKQAAsAAAAABjwAAAJFAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHEIGVgCCcApIXAE2AiQDCAsGAAQgBYRtBy4bgAUR1Ys/sq+wcQ0AKCMxzO7s4dbxlywA4w2+QAIrUAAAAABA8Hzt9zt3d9//+00Taomhi1gSkUZTzUynEiJMh45HsUimByZ4/unc4gMVRqR1SoYZi0pw3aFbm/4hO4VNh2bJ2umnZ+Q3hAuhQ3jVPHGMDgCfuHf6W0CBzAeU4160xqAuoC4OpEDHGhRZCWXcMHaBSzgOAbykUYLUXFp6sBiscQLIvJsaweacGAyLWARXzVKDnCsHqw6SWzgLvy/fpWJB4WisnI7J2nEq3tgxrP/X+31CuUBAqx1AAyWAAempDbahEUbXeIOGLNhXpsCb9w3IXrUI++usdD8AKZB3T3x3LAKAAritnkSA5KjrQSJz++JfybXOMS/f0eF7B4itVLl1SnvltSIO9qACqdWN/RMBBLqPPHZo3Z8lA8D9FYUS09MNdg8mgT/BR01GF1p6ZVR+bbsicoYKL17gH1ujvI5VJU4bFSyJEWY3qSk0lhySoZXAwUcZXFjK4aWY+tU+YqyiEeMBitgBEMJcQRHkGpowdyRDe4FDkl+4CIuGlz5xSx95YrnZkbESbKH+gWuo145RZlHmDc0UK84KQ8YLeXQeKNK8GLlijzzHjPFtShENmqmDCzgNYyQYmDw2klqR4ZBluu5NaUOdmlHNWAm2UP/ANdRrv7PMSp+/oZlixS0NNe4X8uj6hyLNe5Cusr5Xw728Mr5NKaJBM3VwAYMwRoKhfpDHRlI7wj8cMruV7itL11d0X7cLpWZY6kTsQo1Zo6lQCgA=')
+		format('woff2');
+}
+.icon {
+	font-family: 'HMfont-home' !important;
+	font-size: 35upx;
+	font-style: normal;
+	color: #000000;
+	&.jiantou {
+		&:before {
+			content: '\e627';
 		}
 	}
-
+}
+.content{
+	padding-bottom: 20upx;
+	.list{
+		/* width: 96%; */
+		padding-left: 4%;
+		background-color: #fff;
+		margin-bottom: 20upx;
+		.row{
+			widows: 100%;
+			min-height: 90upx;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			border-bottom: solid 1upx #eee;
+			&:last-child{
+				border-bottom: none;
+			}
+			.title{
+				font-size: 32upx;
+				color: #333;
+			}
+			.right{
+				display: flex;
+				align-items: center;
+				color: #999;
+				.tis{
+					font-size: 26upx;
+					margin-right: 5upx;
+					max-height: 120upx;
+					image{
+						width: 100upx;
+						height: 100upx;
+						border-radius: 100%;
+						margin: 10upx 0;
+					}
+				}
+				.icon{
+					width: 40upx;
+					color: #cecece;
+				}
+			}
+			
+		}
+	}
+}
 
 </style>
