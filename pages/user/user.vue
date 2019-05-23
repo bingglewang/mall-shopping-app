@@ -8,19 +8,19 @@
 				<view class="user">
 					<!-- 头像 -->
 					<view class="left" v-if="!hasLogin">
-						<image :src="user.face" @tap="toSetting"></image>
+						<image :src="user.face" @tap="toLogin"></image>
 					</view>
 					<view class="left" v-if="hasLogin">
-						<image :src="userInfo.portrait" @tap="toSetting"></image>
+						<image :src="userInfo.icon" @tap="toUserInfo"></image>
 					</view>
 					<!-- 昵称,个性签名 -->
 					<view class="right" v-if="!hasLogin">
 						<view class="username" @tap="toLogin">{{user.username}}</view>
-						<view class="signature" @tap="toSetting">{{user.signature}}</view>
+						<view class="signature" @tap="toLogin">{{user.signature}}</view>
 					</view>
 					<view class="right" v-if="hasLogin">	
-						<view class="username" @tap="toSetting">{{userInfo.username}}</view>
-						<view class="signature" @tap="toSetting">{{userInfo.mobile}}</view>
+						<view class="username" @tap="toUserInfo">{{userInfo.nickname}}</view>
+						<view class="signature" @tap="toUserInfo">{{userInfo.personalizedSignature == '' || userInfo.personalizedSignature ==undefined ? '这个人很赖,什么都没留下':userInfo.personalizedSignature}}</view>
 					</view>
 				</view>
 			</view>
@@ -31,10 +31,10 @@
 				</view>
 				<view class="tit">
 					<text class="yticon icon-iLinkapp-"></text>
-					DCloud会员
+					YoJo会员
 				</view>
-				<text class="e-m">DCloud Union</text>
-				<text class="e-b">开通会员开发无bug 一测就上线</text>
+				<text class="e-m">YoJoWang</text>
+				<text class="e-b">bingglewang</text>
 			</view>
 		</view>
 		
@@ -52,15 +52,15 @@
 			
 			<view class="tj-sction">
 				<view class="tj-item">
-					<text class="num">128.8</text>
-					<text>余额</text>
+					<text class="num">{{userInfo.growth == '' || userInfo.growth == undefined ? 0 : userInfo.growth}}</text>
+					<text>成长值</text>
 				</view>
 				<view class="tj-item">
-					<text class="num">0</text>
-					<text>优惠券</text>
+					<text class="num">{{userInfo.luckeyCount == '' || userInfo.luckeyCount == undefined ? 0 : userInfo.luckeyCount}}</text>
+					<text>抽奖次数</text>
 				</view>
 				<view class="tj-item">
-					<text class="num">20</text>
+					<text class="num">{{userInfo.integration == '' || userInfo.integration == undefined ? 0 : userInfo.integration}}</text>
 					<text>积分</text>
 				</view>
 			</view>
@@ -167,6 +167,14 @@
 			toSetting(){
 				uni.navigateTo({
 					url:'../set/set'
+				})
+			},
+			/**
+			 * 用户详情页面
+			 */
+			toUserInfo(){
+				uni.navigateTo({
+					url:'../userinfo/userinfo'
 				})
 			},
 			/**

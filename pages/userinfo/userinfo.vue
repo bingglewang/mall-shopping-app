@@ -13,23 +13,23 @@
 					</view>
 				</view>
 				<view class="row">
+					<view class="title">手机号</view>
+					<view class="right">
+						<view class="tis">{{userInfo.phone}}</view>
+						<view class="icon jiantou"></view>
+					</view>
+				</view>
+				<view class="row">
 					<view class="title">昵称</view>
 					<view class="right">
-						<view class="tis">大黑哥</view>
+						<view class="tis">{{userInfo.nickname}}</view>
 						<view class="icon jiantou"></view>
 					</view>
 				</view>
 				<view class="row">
 					<view class="title">个性签名</view>
 					<view class="right">
-						<view class="tis">这人太懒了，什么都不写</view>
-						<view class="icon jiantou"></view>
-					</view>
-				</view>
-				<view class="row">
-					<view class="title">收货地址</view>
-					<view class="right">
-						<view class="tis"></view>
+						<view class="tis">{{userInfo.personalizedSignature == '' || userInfo.personalizedSignature ==undefined ? '这个人很赖,什么都没留下':userInfo.personalizedSignature}}</view>
 						<view class="icon jiantou"></view>
 					</view>
 				</view>
@@ -72,9 +72,10 @@
 import avatar from '../../components/yq-avatar/yq-avatar.vue';
 import uploadFile from '@/api/fileupload/index.js';
 import updateUserIcon from "@/api/userinfo/index.js";
+import getCurrentUserInfo from "@/api/userinfo/index.js";
  import {  
         mapState,
-				mapMutations 
+		mapMutations 
     } from 'vuex';  
 
 export default {
@@ -87,7 +88,7 @@ export default {
 		};
 	},
 	onShow() {
-		this.url = this.userInfo.portrait;
+		this.url = this.userInfo.icon;
 	},
 	 computed: {
 		...mapState(['hasLogin','userInfo'])
@@ -114,14 +115,10 @@ export default {
 						"icon": userIcon
 					}
 					updateUserIcon.updateUserIcon(userId,updateUserData,function(resp1){
-						let updateDefaultUserInfo = {
-							id: _this.userInfo.id,
-							mobile: _this.userInfo.mobile,
-							username: _this.userInfo.username,
-							nickname: _this.userInfo.nickname,
-							portrait: userIcon
-						}
-						_this.login(updateDefaultUserInfo);
+					    getCurrentUserInfo.getCurrentUserInfo(function(resp2){
+							let updateDefaultUserInfo = resp2.data.data;
+							_this.login(updateDefaultUserInfo)
+						})
 					})
 				} else {
 					uni.hideToast({

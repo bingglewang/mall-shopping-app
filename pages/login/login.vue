@@ -35,6 +35,7 @@
 <script>
 	import md5 from "@/common/SDK/md5.min.js";
 	import login from "@/api/login/index.js";
+	import getCurrentUserInfo from "@/api/userinfo/index.js";
 	import {  
         mapMutations  
     } from 'vuex';
@@ -151,14 +152,10 @@
 						    key: 'token',  
 						    data: resp.data.data.tokenHead+ " "+resp.data.data.token
 						})
-						let defaultUserInfo = {
-							id: resp.data.data.id,
-							mobile: resp.data.data.mobile,
-							username: _this.phoneNumber,
-							nickname: resp.data.data.nickname,
-							portrait: resp.data.data.portrait
-						}
-						_this.login(defaultUserInfo);
+						getCurrentUserInfo.getCurrentUserInfo(function(resp1){
+							let defaultUserInfo = resp1.data.data;
+							_this.login(defaultUserInfo)
+						})
                         uni.navigateBack();  
 					}else{
 						uni.showToast({title: resp.data.message,icon:"none"});
