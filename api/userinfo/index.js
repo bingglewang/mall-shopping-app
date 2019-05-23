@@ -1,0 +1,1 @@
+import urlRequest from '@/util/request'
