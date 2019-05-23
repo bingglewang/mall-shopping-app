@@ -4,44 +4,64 @@
 			<view class="list">
 				<view class="row">
 					<view class="title">头像</view>
-					<view class="right"><view class="tis">
-					<avatar
-						selWidth="200px" selHeight="400upx"
-						:avatarSrc="url" @upload="myUpload" quality="0.9"
-						avatarStyle="" >
-					</avatar>
-					<!-- <image src="/static/img/face.jpg" mode="widthFix"></image> -->
-					</view><view class="icon jiantou"></view></view>
+					<view class="right">
+						<view class="tis">
+							<avatar selWidth="200px" selHeight="400upx" :avatarSrc="url" @upload="myUpload" quality="0.9" avatarStyle=""></avatar>
+							<!-- <image src="/static/img/face.jpg" mode="widthFix"></image> -->
+						</view>
+						<view class="icon jiantou"></view>
+					</view>
 				</view>
 				<view class="row">
 					<view class="title">昵称</view>
-					<view class="right"><view class="tis">大黑哥</view><view class="icon jiantou"></view></view>
+					<view class="right">
+						<view class="tis">大黑哥</view>
+						<view class="icon jiantou"></view>
+					</view>
 				</view>
 				<view class="row">
 					<view class="title">个性签名</view>
-					<view class="right"><view class="tis">这人太懒了，什么都不写</view><view class="icon jiantou"></view></view>
+					<view class="right">
+						<view class="tis">这人太懒了，什么都不写</view>
+						<view class="icon jiantou"></view>
+					</view>
 				</view>
 				<view class="row">
 					<view class="title">收货地址</view>
-					<view class="right"><view class="tis"></view><view class="icon jiantou"></view></view>
+					<view class="right">
+						<view class="tis"></view>
+						<view class="icon jiantou"></view>
+					</view>
 				</view>
 				<view class="row">
 					<view class="title">账户安全</view>
-					<view class="right"><view class="tis"></view><view class="icon jiantou"></view></view>
+					<view class="right">
+						<view class="tis"></view>
+						<view class="icon jiantou"></view>
+					</view>
 				</view>
 			</view>
 			<view class="list">
 				<view class="row">
 					<view class="title">通知提醒</view>
-					<view class="right"><view class="tis"></view><view class="icon jiantou"></view></view>
+					<view class="right">
+						<view class="tis"></view>
+						<view class="icon jiantou"></view>
+					</view>
 				</view>
 				<view class="row">
 					<view class="title">支付设置</view>
-					<view class="right"><view class="tis"></view><view class="icon jiantou"></view></view>
+					<view class="right">
+						<view class="tis"></view>
+						<view class="icon jiantou"></view>
+					</view>
 				</view>
 				<view class="row">
 					<view class="title">通用</view>
-					<view class="right"><view class="tis"></view><view class="icon jiantou"></view></view>
+					<view class="right">
+						<view class="tis"></view>
+						<view class="icon jiantou"></view>
+					</view>
 				</view>
 			</view>
 		</view>
@@ -49,40 +69,75 @@
 </template>
 
 <script>
-	import avatar from "../../components/yq-avatar/yq-avatar.vue";
-	import uploadFile from "@/api/fileupload/index.js";
-	
-	export default {
-		components: {
-            avatar
-        },
-		data() {
-			return {
-				url: "/static/img/face.jpg"
+import avatar from '../../components/yq-avatar/yq-avatar.vue';
+import uploadFile from '@/api/fileupload/index.js';
+import updateUserIcon from "@/api/userinfo/index.js";
+ import {  
+        mapState,
+				mapMutations 
+    } from 'vuex';  
+
+export default {
+	components: {
+		avatar
+	},
+	data() {
+		return {
+			url: ''
+		};
+	},
+	onShow() {
+		this.url = this.userInfo.portrait;
+	},
+	 computed: {
+		...mapState(['hasLogin','userInfo'])
+	},
+	methods: {
+		...mapMutations(['login']),
+		myUpload(path) {
+			let _this = this;
+			this.url = path;
+			let opt = {
+				filePath: this.url,
+				name: 'file'
 			};
-		},
-		methods: {
-			myUpload(path) {
-                this.url = path;
-				let opt = {
-					"filePath": this.url,
-					"name": 'file'
+			let formData = {
+				imgSystemId: 'yojo网',
+				imgSpecificUniqueValue: 'bingglewang'
+			};
+			uploadFile.uploadFile(opt, formData, function(resp) {
+				var obj = eval('(' + resp.data + ')');
+				if (obj.code - 200 == 0) {
+					let userIcon = obj.data.imgUrl; //修改用户头像
+					let userId = _this.userInfo.id;
+					let updateUserData = {
+						"icon": userIcon
+					}
+					updateUserIcon.updateUserIcon(userId,updateUserData,function(resp1){
+						let updateDefaultUserInfo = {
+							id: _this.userInfo.id,
+							mobile: _this.userInfo.mobile,
+							username: _this.userInfo.username,
+							nickname: _this.userInfo.nickname,
+							portrait: userIcon
+						}
+						_this.login(updateDefaultUserInfo);
+					})
+				} else {
+					uni.hideToast({
+						title: obj.message,
+						icon: 'none'
+					});
 				}
-				let formData = {
-					"imgSystemId": 'yojo网',
-					"imgSpecificUniqueValue": 'bingglewang'
-				}
-				uploadFile.uploadFile(opt,formData,function(resp){
-					console.log(666,resp)
-				})
-            }
+			});
 		}
 	}
+};
 </script>
 
 <style lang="scss">
-page{
-	background-color: #f3f3f3;	
+page {
+	background-color: #f3f3f3;
 }
 @font-face {
 	font-family: 'HMfont-home';
@@ -100,50 +155,48 @@ page{
 		}
 	}
 }
-.content{
+.content {
 	padding-bottom: 20upx;
-	.list{
+	.list {
 		/* width: 96%; */
 		padding-left: 4%;
 		background-color: #fff;
 		margin-bottom: 20upx;
-		.row{
+		.row {
 			widows: 100%;
 			min-height: 90upx;
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
 			border-bottom: solid 1upx #eee;
-			&:last-child{
+			&:last-child {
 				border-bottom: none;
 			}
-			.title{
+			.title {
 				font-size: 32upx;
 				color: #333;
 			}
-			.right{
+			.right {
 				display: flex;
 				align-items: center;
 				color: #999;
-				.tis{
+				.tis {
 					font-size: 26upx;
 					margin-right: 5upx;
 					max-height: 120upx;
-					image{
+					image {
 						width: 100upx;
 						height: 100upx;
 						border-radius: 100%;
 						margin: 10upx 0;
 					}
 				}
-				.icon{
+				.icon {
 					width: 40upx;
 					color: #cecece;
 				}
 			}
-			
 		}
 	}
 }
-
 </style>
